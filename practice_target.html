@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    function targetimage() {
+        var milliseconds = String((new Date).getTime());
+        var trn_btm = milliseconds.substring(7,16);
+        var trn_top = milliseconds.substring(0,7);
+        var trn_rnd = "";
+        var y = 9;
+        var x = 0;
+        for (rr = 0; rr < 7; rr++) {
+            trn_rnd += String(Math.floor(Math.random() * ((y-x)+1) + x));
+        }
+        var trn = trn_rnd + "-" + trn_top + "-" + trn_btm;
+        $(document).ready(function() {
+          document.title = 'Practice Target ' + trn;
+        });
+        $('#txtid').text(trn);
+        $('.topcover').css('background', "#999F");
+        $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        {
+            tags: "",
+            tagmode: "any",
+            format: "json"
+        },
+        function(data) {
+            var rnd = Math.floor(Math.random() * data.items.length);
+            var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
+            $('#fetchedimg').attr("src", image_src);
+        });
+    }
+    function showtargetimage() {
+        $('.topcover').css('background', "#9990");
+    }
+    </script>
+</head>
+<body>
+<div style="float:left:margin-bottom:100px;">
+<input type="button" value="generate" onclick="targetimage();">
+<input type="button" value="show" onclick="showtargetimage();">
+<font face="sans-serif" size="6"><div id="txtid" style="color:#111"> 0000-0000-0000</div></font>
+</div>
+<div style="float:none"/>
+
+<div class="fetched" style="position:absolute;width:60%;height:80%;background:#999F;overflow:hidden;">
+<img id="fetchedimg" src="" style="height:100%;background:#000F;background-repeat:no-repeat;"/>
+</div>
+<div class="topcover" style="position:absolute;width:60%;height:80%;background:#999F"/>
+</body>
+</html>
